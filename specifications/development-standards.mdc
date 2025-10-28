@@ -1,0 +1,295 @@
+# Development Standards & Guidelines
+
+## Purpose
+This document outlines the core development standards and best practices for The Lab project. All code contributions should adhere to these guidelines to ensure consistency, security, and maintainability.
+
+---
+
+## 1. JavaScript Standards
+
+### ES6+ Specification
+- **MUST** use ES6 modules (`import/export`) syntax
+- **MUST** use `const` and `let` instead of `var`
+- **PREFER** arrow functions for callbacks and functional operations
+- **PREFER** template literals over string concatenation
+- **UTILIZE** destructuring for objects and arrays where appropriate
+- **UTILIZE** async/await for asynchronous operations
+
+```javascript
+// ✓ Good
+const fetchData = async (endpoint) => {
+  const response = await fetch(endpoint);
+  return await response.json();
+};
+
+// ✗ Avoid
+var fetchData = function(endpoint) {
+  return fetch(endpoint).then(function(response) {
+    return response.json();
+  });
+};
+```
+
+---
+
+## 2. Data Loading & API Communication
+
+### Service Layer Pattern
+- **MUST** load all dynamic data from `/data` service endpoints
+- **MUST** use the `fetch` API for all HTTP requests
+- **MUST** implement proper error handling for all API calls
+- **SHOULD** implement loading states for better UX
+- **SHOULD** implement retry logic for failed requests where appropriate
+
+```javascript
+// ✓ Good
+const loadUserData = async (userId) => {
+  try {
+    const response = await fetch(`/data/users/${userId}`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Failed to load user data:', error);
+    throw error;
+  }
+};
+```
+
+### API Response Handling
+- **MUST** check response status codes
+- **MUST** handle network errors gracefully
+- **SHOULD** provide meaningful error messages to users
+- **SHOULD** log errors for debugging purposes
+
+---
+
+## 3. Responsive Design
+
+### Mobile-First Approach
+- **MUST** design for mobile devices first, then scale up
+- **MUST** use responsive units (%, em, rem, vw, vh) over fixed pixels
+- **MUST** test all features on multiple screen sizes
+- **SHOULD** use CSS Grid and Flexbox for layouts
+- **SHOULD** implement appropriate breakpoints for different devices
+
+```css
+/* ✓ Good - Mobile first */
+.container {
+  padding: 1rem;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding: 2rem;
+    max-width: 1200px;
+  }
+}
+```
+
+### Touch and Interaction
+- **MUST** ensure touch targets are at least 44x44px
+- **MUST** test touch interactions on actual devices
+- **SHOULD** provide appropriate hover and focus states
+
+---
+
+## 4. Separation of Concerns
+
+### File Organization
+- **MUST** separate HTML, CSS, and JavaScript into distinct files
+- **MUST** organize code by feature or component
+- **SHOULD** use meaningful directory structures
+- **SHOULD** group related functionality together
+
+```
+project/
+├── public/
+│   ├── styles/
+│   │   ├── main.css
+│   │   ├── components/
+│   │   └── utilities/
+│   ├── scripts/
+│   │   ├── services/
+│   │   ├── components/
+│   │   └── utils/
+│   └── index.html
+└── server.js
+```
+
+### Component Architecture
+- **MUST** create reusable components where possible
+- **MUST** keep components focused on a single responsibility
+- **SHOULD** document component interfaces and dependencies
+- **SHOULD** minimize component coupling
+
+---
+
+## 5. CSS Standards
+
+### External Stylesheets Only
+- **MUST** use external CSS files linked via `<link>` tags
+- **MUST NOT** use inline styles in HTML (`style="..."`)
+- **MUST NOT** use `<style>` tags in HTML documents
+- **EXCEPTION** Dynamic styles calculated at runtime may use `element.style.property`
+
+```html
+<!-- ✓ Good -->
+<link rel="stylesheet" href="styles/main.css">
+<div class="card">Content</div>
+
+<!-- ✗ Avoid -->
+<div style="color: red; padding: 10px;">Content</div>
+```
+
+### CSS Organization
+- **SHOULD** use BEM or similar naming methodology
+- **SHOULD** organize CSS by component or feature
+- **SHOULD** use CSS custom properties for theming
+- **SHOULD** minimize use of `!important`
+
+---
+
+## 6. Security Best Practices
+
+### DOM Manipulation
+- **MUST** minimize use of `innerHTML` 
+- **MUST** sanitize any user input before rendering
+- **PREFER** `textContent`, `createElement`, and DOM manipulation methods
+- **PREFER** template-based rendering over string concatenation
+
+```javascript
+// ✓ Good - Safe DOM manipulation
+const addListItem = (text) => {
+  const li = document.createElement('li');
+  li.textContent = text; // Automatically escapes HTML
+  list.appendChild(li);
+};
+
+// ✗ Avoid - XSS vulnerability
+const addListItem = (text) => {
+  list.innerHTML += `<li>${text}</li>`; // Dangerous!
+};
+```
+
+### When innerHTML is Necessary
+- **MUST** sanitize content using a trusted library (e.g., DOMPurify)
+- **MUST** document why innerHTML is necessary
+- **SHOULD** prefer safer alternatives when possible
+
+### Additional Security Measures
+- **MUST** validate all user inputs
+- **MUST** use HTTPS in production
+- **SHOULD** implement Content Security Policy headers
+- **SHOULD** keep dependencies updated
+
+---
+
+## 7. Code Hygiene
+
+### Code Quality
+- **MUST** write self-documenting code with clear variable names
+- **MUST** follow consistent formatting and indentation
+- **MUST** remove commented-out code before committing
+- **MUST** remove console.log statements from production code
+- **SHOULD** add comments for complex logic only
+- **SHOULD** keep functions small and focused
+
+```javascript
+// ✓ Good - Clear and self-documenting
+const calculateTotalPrice = (items) => {
+  return items.reduce((total, item) => total + item.price, 0);
+};
+
+// ✗ Avoid - Unclear and poorly named
+const calc = (arr) => {
+  let t = 0;
+  for(let i = 0; i < arr.length; i++) {
+    t = t + arr[i].p;
+  }
+  return t;
+};
+```
+
+### Error Handling
+- **MUST** handle errors gracefully
+- **MUST** provide meaningful error messages
+- **SHOULD** log errors appropriately
+- **SHOULD** never expose sensitive information in error messages
+
+### Testing Considerations
+- **SHOULD** write code that is easy to test
+- **SHOULD** minimize side effects
+- **SHOULD** use pure functions where possible
+
+---
+
+## 8. Performance Considerations
+
+### Optimization
+- **MUST** minimize DOM queries (cache element references)
+- **MUST** debounce/throttle frequent event handlers
+- **SHOULD** lazy-load images and heavy resources
+- **SHOULD** minimize bundle sizes
+- **SHOULD** use code splitting for large applications
+
+```javascript
+// ✓ Good - Cache DOM reference
+const button = document.getElementById('myButton');
+button.addEventListener('click', handleClick);
+button.addEventListener('mouseover', handleHover);
+
+// ✗ Avoid - Repeated DOM queries
+document.getElementById('myButton').addEventListener('click', handleClick);
+document.getElementById('myButton').addEventListener('mouseover', handleHover);
+```
+
+---
+
+## 9. Accessibility
+
+### WCAG Compliance
+- **MUST** use semantic HTML elements
+- **MUST** provide appropriate ARIA labels where needed
+- **MUST** ensure keyboard navigation works
+- **SHOULD** test with screen readers
+- **SHOULD** maintain sufficient color contrast
+
+---
+
+## 10. Documentation
+
+### Code Documentation
+- **MUST** document public APIs and exported functions
+- **SHOULD** use JSDoc comments for function documentation
+- **SHOULD** maintain up-to-date README files
+- **SHOULD** document non-obvious decisions
+
+```javascript
+/**
+ * Fetches user data from the server
+ * @param {string} userId - The unique identifier for the user
+ * @returns {Promise<Object>} User data object
+ * @throws {Error} If the request fails or user is not found
+ */
+const fetchUserData = async (userId) => {
+  // Implementation
+};
+```
+
+---
+
+## Enforcement
+
+These standards should be:
+- Reviewed during code reviews
+- Enforced via linting tools where possible
+- Updated as the project evolves
+- Discussed and refined by the team
+
+---
+
+**Last Updated:** October 28, 2025  
+**Version:** 1.0.0

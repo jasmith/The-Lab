@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Lab</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧪 The Lab</h1>
+            <p class="subtitle">Collection of ideas, POCs, experiments, and utilities</p>
+        </header>
+        
+        <main>
+            <section class="welcome-section">
+                <h2>Welcome to The Lab</h2>
+                <p>A playground for experimentation and innovation.</p>
+            </section>
+            
+            <section class="experiments-section">
+                <h3>🧪 Experiments</h3>
+                <div id="experimentsList" class="experiments-grid">
+                    <div class="experiment-card">
+                        <h4>Psychocircle</h4>
+                        <p>Canvas-based circle animation with gradients and music</p>
+                        <a href="/experiments/psychoCircle/" class="experiment-link">Launch Experiment →</a>
+                    </div>
+                    <div class="experiment-card">
+                        <h4>🎈 Balloonacy</h4>
+                        <p>Interactive balloon popping game - click the balloons before they float away!</p>
+                        <a href="/experiments/balloonacy/" class="experiment-link">Launch Experiment →</a>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="api-test">
+                <h3>API Test</h3>
+                <button id="testApiBtn">Test API Connection</button>
+                <div id="apiResponse"></div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>Server running on Node.js with ES6 modules</p>
+        </footer>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>
+

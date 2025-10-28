@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psychocircle - Circle Exercise</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Psychocircle</h1>
+            <nav class="breadcrumb">
+                <a href="/">← Back to Lab</a>
+            </nav>
+        </header>
+        
+        <div class="controls">
+            <button id="stopBtn" class="btn btn-stop">Stop Transmission</button>
+            <button id="startBtn" class="btn btn-start">Start Transmission</button>
+        </div>
+        
+        <div class="canvas-wrapper">
+            <canvas id="myCanvas" width="1800" height="1200">
+                Your browser does not support the canvas element.
+            </canvas>
+        </div>
+        
+        <div class="svg-demo">
+            <svg height="100" width="100">
+                <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" id="svgCircle" />
+                <a href="https://www.smurf.com">
+                    <text x="50" y="50" text-anchor="middle">
+                        &lt;smurf&gt;
+                    </text>
+                </a>
+            </svg>
+        </div>
+    </div>
+    
+    <script type="module" src="app.js"></script>
+</body>
+</html>
+
